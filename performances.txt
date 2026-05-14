@@ -1,0 +1,729 @@
+(1)create a Student,Subject and Marks table primary key Constraints and foreign key constraints.
+
+CREATE DATABASE Practical1;
+
+USE Practical1;
+
+CREATE TABLE Student(
+Roll_no INT PRIMARY KEY,
+Name VARCHAR(50),
+Address VARCHAR(100)
+);
+
+CREATE TABLE Subject(
+Sub_code VARCHAR(10) PRIMARY KEY,
+Sub_Name VARCHAR(50)
+);
+
+CREATE TABLE Marks(
+Roll_no INT,
+Subject_code VARCHAR(10),
+Marks INT,
+FOREIGN KEY (Roll_no) REFERENCES Student(Roll_no),
+FOREIGN KEY (Subject_code) REFERENCES Subject(Sub_code)
+);
+
+INSERT INTO Student VALUES
+(1,'Rahul','Pune'),
+(2,'Amit','Mumbai'),
+(3,'Sneha','Nashik');
+
+SELECT * FROM Student;
+
+INSERT INTO Subject VALUES
+('CE2412','DBMS'),
+('CE2413','JAVA');
+
+SELECT * FROM Subject;
+
+INSERT INTO Marks VALUES
+(1,'CE2412',80),
+(2,'CE2412',35),
+(3,'CE2412',90),
+(1,'CE2413',70);
+
+SELECT * FROM Marks;
+
+SELECT Roll_no,
+AVG(Marks) AS Average_Marks
+FROM Marks
+WHERE Subject_code='CE2412'
+GROUP BY Roll_no;
+
+SELECT COUNT(*) AS Failed_Students
+FROM Marks M
+JOIN Subject S
+ON M.Subject_code=S.Sub_code
+WHERE S.Sub_Name='DBMS'
+AND M.Marks<40;
+
+
+(2)2.Library Management System. You need to work with the following tables:
+
+
+CREATE DATABASE Practical2;
+
+USE Practical2;
+
+CREATE TABLE BOOK(
+Book_id INT PRIMARY KEY,
+Book_Title VARCHAR(100),
+Book_author VARCHAR(50)
+);
+
+CREATE TABLE MEMBER(
+member_id INT PRIMARY KEY,
+member_name VARCHAR(50),
+member_city VARCHAR(50),
+member_email VARCHAR(100)
+);
+
+CREATE TABLE ISSUE(
+issue_id INT PRIMARY KEY,
+member_id INT,
+book_id INT,
+issue_date DATE,
+return_date DATE,
+FOREIGN KEY(member_id) REFERENCES MEMBER(member_id),
+FOREIGN KEY(book_id) REFERENCES BOOK(Book_id)
+);
+
+INSERT INTO BOOK VALUES
+(1,'DBMS','Korth'),
+(2,'Java','James'),
+(3,'Python','Guido'),
+(4,'C++','Bjarne'),
+(5,'OS','Galvin');
+
+SELECT * FROM BOOK;
+
+INSERT INTO MEMBER VALUES
+(1,'KomalJadhav','Mumbai','komal@gmail.com'),
+(2,'Rohit','Pune','rohit@gmail.com'),
+(3,'Sneha','Mumbai','sneha@gmail.com'),
+(4,'Aman','Nashik','aman@gmail.com');
+
+SELECT * FROM MEMBER;
+
+INSERT INTO ISSUE VALUES
+(1,1,2,'2026-01-10','2026-01-20'),
+(2,2,3,'2026-01-11','2026-01-21'),
+(3,3,1,'2026-01-12','2026-01-22');
+
+SELECT * FROM ISSUE;
+
+SELECT * FROM MEMBER
+WHERE member_city='Mumbai';
+
+UPDATE MEMBER
+SET member_email='newkomal@gmail.com'
+WHERE member_name='KomalJadhav';
+
+SELECT * FROM MEMBER;
+
+
+(3)3.Create a table named OWNER with the following structure:
+
+CREATE DATABASE Practical3;
+
+USE Practical3;
+
+CREATE TABLE OWNER(
+OWNER_ID INT PRIMARY KEY,
+OWNER_NAME VARCHAR(50) NOT NULL,
+OWNER_CONTACT VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE VEHICLE(
+VEHICLE_ID INT PRIMARY KEY,
+VEHICLE_TYPE VARCHAR(50) NOT NULL,
+VEHICLE_MODEL VARCHAR(50),
+VEHICLE_NUMBER VARCHAR(20) NOT NULL,
+OWNER_ID INT NOT NULL,
+FOREIGN KEY (OWNER_ID) REFERENCES OWNER(OWNER_ID)
+);
+
+ALTER TABLE VEHICLE
+ADD VEHICLE_COLOR TEXT;
+
+ALTER TABLE VEHICLE
+MODIFY VEHICLE_COLOR VARCHAR(50);
+
+ALTER TABLE VEHICLE
+ADD REGISTRATION_YEAR INT,
+ADD INSURANCE_STATUS VARCHAR(30);
+
+DESC OWNER;
+
+DESC VEHICLE;
+
+
+(4)4.Create a Student table with the following fields:
+
+CREATE DATABASE Practical4;
+(1,'Rahul','BCA',80,'Pune'),
+(2,'Sneha','BSc',55,'Mumbai'),
+(3,'Amit','BCA',90,'Nashik');
+
+SELECT * FROM Student;
+
+DELIMITER //
+
+CREATE PROCEDURE GetStudents(IN min_marks INT)
+BEGIN
+SELECT *
+FROM Student
+WHERE Marks > min_marks;
+END //
+
+DELIMITER ;
+
+CALL GetStudents(60);
+
+3.Design Employee Information System where you will store employee details in a table called Employee
+with the following columns:
+
+CREATE TABLE Employee(
+emp_id INT PRIMARY KEY,
+emp_name VARCHAR(50),
+emp_city VARCHAR(50),
+emp_post VARCHAR(50),
+emp_salary DECIMAL(10,2)
+);
+
+INSERT INTO Employee VALUES
+(1,'Rahul','Pune','Manager',20000),
+(2,'Amit','Nasik','Clerk',12000),
+(3,'Sneha','Mumbai','HR',30000),
+(4,'Rohit','Nasik','Sales',15000),
+(5,'Pooja','Pune','HR',25000),
+(6,'Karan','Delhi','Manager',40000),
+(7,'Neha','Nasik','Sales',11000),
+(8,'Komal','Mumbai','Clerk',9000);
+
+SELECT * FROM Employee;
+
+SELECT emp_id, emp_name, emp_city
+FROM Employee;
+
+SELECT emp_id, emp_salary
+FROM Employee
+WHERE emp_salary > 10000;
+
+SELECT emp_name
+FROM Employee
+WHERE emp_city='Nasik'
+ORDER BY emp_name ASC;
+
+SELECT emp_id, emp_name
+FROM Employee
+WHERE emp_salary =
+(
+SELECT MAX(emp_salary)
+FROM Employee
+);
+
+SELECT emp_id
+FROM Employee;
+
+
+(5)5.Create a Customers table with the following fields:
+
+CREATE DATABASE Practical5;
+
+USE Practical5;
+
+CREATE TABLE Customers(
+CustomerID INT,
+CustomerName VARCHAR(50),
+ContactName VARCHAR(50),
+Address VARCHAR(100),
+City VARCHAR(50),
+PostalCode INT,
+Country VARCHAR(50)
+);
+
+INSERT INTO Customers VALUES
+(1,'Rahul','Raj','ABC Road','Pune',411001,'India'),
+(2,'Sneha','Priya','XYZ Road','Mumbai',400001,'India'),
+(3,'Amit','Ravi','LMN Road','Pune',411002,'India');
+
+SELECT * FROM Customers;
+
+DELIMITER //
+
+CREATE PROCEDURE GetCustomerCity(IN city_name VARCHAR(50))
+BEGIN
+SELECT *
+FROM Customers
+WHERE City=city_name;
+END //
+
+DELIMITER ;
+
+CALL GetCustomerCity('Pune');
+
+
+(7)7.Perform following SQL queries on the database created in assignment 1. •
+Implementation of relational operators in SQL Student table?
+
+CREATE DATABASE Practical7;
+
+USE Practical7;
+
+CREATE TABLE Student(
+ID INT,
+Name VARCHAR(50),
+City VARCHAR(50),
+Percentage DECIMAL(5,2)
+);
+
+INSERT INTO Student VALUES
+(1,'Sarika','Nashik',75.5),
+(2,'Rakhi','Pune',65.00),
+(3,'Mehak','Mumbai',55.0),
+(4,'Omkar','Sangamner',45.0);
+
+SELECT * FROM Student;
+
+SELECT * FROM Student
+WHERE City='Mumbai';
+
+SELECT * FROM Student
+WHERE Percentage > 55;
+
+SELECT * FROM Student
+WHERE Percentage <= 65;
+
+SELECT * FROM Student
+WHERE Percentage BETWEEN 50 AND 80;
+
+
+(8)8.Perform following SQL queries on the database created in assignment 1. •
+Implementation of relational operators in SQL Persons table?
+
+CREATE DATABASE Practical8;
+
+USE Practical8;
+
+CREATE TABLE Persons(
+PersonsID INT,
+Name VARCHAR(50),
+Department VARCHAR(50),
+Salary INT,
+Age INT
+);
+
+INSERT INTO Persons VALUES
+(1,'Vedika','Sales',60000,35),
+(2,'Neha','Marketing',45000,28),
+(3,'Maya','HR',55000,42),
+(4,'Viraj','Sales',70000,45),
+(5,'Adi','IT',65000,30);
+
+SELECT * FROM Persons;
+
+SELECT * FROM Persons
+WHERE Department='Sales';
+
+SELECT * FROM Persons
+WHERE Age > 35;
+
+SELECT * FROM Persons
+WHERE Age < 35;
+
+SELECT * FROM Persons
+WHERE Salary >= 60000;
+
+SELECT * FROM Persons
+WHERE Salary <= 60000;
+
+
+(10)10Create table Student (Id,Name,City,Percentage) Table using MYSQL
+
+CREATE DATABASE Practical10;
+
+USE Practical10;
+
+CREATE TABLE Student(
+Id INT PRIMARY KEY,
+Name VARCHAR(50),
+City VARCHAR(50),
+Percentage DECIMAL(5,2)
+);
+
+INSERT INTO Student VALUES
+(1,'Rahul','Pune',75),
+(2,'Sneha','Mumbai',82),
+(3,'Amit','Pune',55),
+(4,'Karan','Pune',90);
+
+SELECT * FROM Student;
+
+DELIMITER //
+
+CREATE PROCEDURE CountStudents(IN city_name VARCHAR(50))
+BEGIN
+SELECT COUNT(*) AS Total_Students
+FROM Student
+WHERE City=city_name
+AND Percentage > 60;
+END //
+
+DELIMITER ;
+
+CALL CountStudents('Pune');
+
+
+(11)11Write and execute suitable database triggers considering both row-level and statement-level
+triggers.Create a database to maintain employee salary details.
+
+CREATE DATABASE Practical11;
+
+USE Practical11;
+
+CREATE TABLE EMP1(
+eid INT,
+salary DECIMAL(10,2),
+ename VARCHAR(50)
+);
+
+CREATE TABLE AUDIT(
+action1 VARCHAR(50),
+date_of_action DATE,
+eno INT,
+old_salary DECIMAL(10,2),
+new_salary DECIMAL(10,2)
+);
+
+DELIMITER //
+
+CREATE TRIGGER salary_trigger
+AFTER UPDATE
+ON EMP1
+FOR EACH ROW
+BEGIN
+INSERT INTO AUDIT
+VALUES(
+'UPDATE',
+CURDATE(),
+OLD.eid,
+OLD.salary,
+NEW.salary
+);
+END //
+
+DELIMITER ;
+
+INSERT INTO EMP1 VALUES
+(1,20000,'Rahul'),
+(2,30000,'Sneha');
+
+SELECT * FROM EMP1;
+
+UPDATE EMP1
+SET salary=25000
+WHERE eid=1;
+
+SELECT * FROM EMP1;
+
+SELECT * FROM AUDIT;
+
+
+(12)12Create a view named Student_View from the Student table to display only S_ID, S_NAME, and
+S_CITY details. Perform SQL Operations Included:1. CREATE VIEW 2.SELECT FROM VIEW 3.UPDATE
+VIEW 4.DROP VIEW?
+
+CREATE DATABASE Practical12;
+
+USE Practical12;
+
+CREATE TABLE Student(
+S_ID INT,
+S_NAME VARCHAR(50),
+S_CITY VARCHAR(50)
+);
+
+INSERT INTO Student VALUES
+(1,'Tanishka','Nashik'),
+(2,'Sakshi','Pune'),
+(3,'Monali','Mumbai'),
+(4,'Tejas','Nashik');
+
+SELECT * FROM Student;
+
+CREATE VIEW Student_View AS
+SELECT S_ID,S_NAME,S_CITY
+FROM Student;
+
+SELECT * FROM Student_View;
+
+UPDATE Student
+SET S_CITY='Pune'
+WHERE S_ID=1;
+
+SELECT * FROM Student_View;
+
+DROP VIEW Student_View;
+
+
+(14)14.Write and execute SQL queries to demonstrate the use of Aggregate Functions, GROUP BY clause,
+and HAVING clause.
+
+CREATE DATABASE Practical14;
+
+USE Practical14;
+
+CREATE TABLE EMP(
+emp_id INT PRIMARY KEY,
+emp_name VARCHAR(50),
+emp_age INT,
+emp_address VARCHAR(100),
+emp_salary DECIMAL(10,2),
+Dept_id INT
+);
+
+INSERT INTO EMP VALUES
+(1,'Rahul',25,'Pune',20000,101),
+(2,'Sneha',26,'Mumbai',30000,102),
+(3,'Amit',27,'Nashik',25000,101),
+(4,'Karan',28,'Delhi',40000,103),
+(5,'Pooja',24,'Pune',22000,102);
+
+SELECT * FROM EMP;
+
+SELECT *
+FROM EMP
+ORDER BY emp_salary ASC;
+
+SELECT *
+FROM EMP
+ORDER BY emp_name DESC;
+
+SELECT Dept_id,
+COUNT(*) AS Total_Employees
+FROM EMP
+GROUP BY Dept_id;
+
+SELECT Dept_id,
+SUM(emp_salary) AS Total_Salary
+FROM EMP
+GROUP BY Dept_id;
+
+
+(15)15.Design a database with two tables 1.CUSTOMER_2023 2.CUSTOMER_2024
+
+CREATE DATABASE Practical15;
+
+USE Practical15;
+
+CREATE TABLE CUSTOMER_2023(
+ID INT,
+Name VARCHAR(50),
+City VARCHAR(50)
+);
+
+CREATE TABLE CUSTOMER_2024(
+ID INT,
+Name VARCHAR(50),
+City VARCHAR(50)
+);
+
+INSERT INTO CUSTOMER_2023 VALUES
+(101,'Vedika','Mumbai'),
+(102,'Neha','Pune'),
+(103,'Maya','Delhi'),
+(104,'Viraj','Mumbai');
+
+INSERT INTO CUSTOMER_2024 VALUES
+(103,'Maya','Delhi'),
+(104,'Viraj','Mumbai'),
+(105,'Sakshi','Chennai'),
+(106,'Neha','Pune');
+
+SELECT * FROM CUSTOMER_2023;
+
+SELECT * FROM CUSTOMER_2024;
+
+SELECT * FROM CUSTOMER_2023
+UNION
+SELECT * FROM CUSTOMER_2024;
+
+SELECT * FROM CUSTOMER_2023
+WHERE ID IN
+(
+SELECT ID FROM CUSTOMER_2024
+);
+
+SELECT * FROM CUSTOMER_2023
+WHERE ID NOT IN
+(
+SELECT ID FROM CUSTOMER_2024
+);
+
+SELECT * FROM CUSTOMER_2024
+WHERE ID NOT IN
+(
+SELECT ID FROM CUSTOMER_2023
+);
+
+
+(17)16Construct ER-Diagram library management system:
+
+CREATE DATABASE Practical17;
+
+USE Practical17;
+
+CREATE TABLE EMP(
+Emp_Id INT,
+Name VARCHAR(50),
+Age INT,
+Address VARCHAR(50),
+Salary DECIMAL(10,2),
+Dept_id INT
+);
+
+INSERT INTO EMP VALUES
+(1,'Rama',32,'Delhi',2000.00,500),
+(2,'Kamal',25,'Pune',1500.00,500),
+(3,'Karan',23,'Pune',2000.00,500),
+(4,'Chirag',25,'Mumbai',6500.00,501),
+(5,'Harsh',32,'Mumbai',8500.00,501),
+(6,'Kajal',22,'Bilaspur',4500.00,502),
+(7,'Mahi',24,'Patna',10000.00,502);
+
+SELECT * FROM EMP;
+
+SELECT * FROM EMP
+WHERE Salary IN (2000,4500,10000);
+
+SELECT * FROM EMP
+WHERE Salary BETWEEN 2000 AND 7000;
+
+SELECT * FROM EMP
+WHERE Name LIKE '_a%';
+
+
+(18)18.Perform Following SQL Queries: Aggregate function with group by and having clause?
+
+CREATE DATABASE Practical18;
+
+USE Practical18;
+
+CREATE TABLE EMP(
+Emp_Id INT,
+Name VARCHAR(50),
+Age INT,
+Address VARCHAR(50),
+Salary DECIMAL(10,2),
+Dept_id INT
+);
+
+INSERT INTO EMP VALUES
+(1,'Rama',32,'Delhi',2000.00,500),
+(2,'Kamal',25,'Pune',1500.00,500),
+(3,'Karan',23,'Pune',2000.00,500),
+(4,'Chirag',25,'Mumbai',6500.00,501),
+(5,'Harsh',32,'Mumbai',8500.00,501),
+(6,'Kajal',22,'Bilaspur',4500.00,502),
+(7,'Mahi',24,'Patna',10000.00,502);
+
+SELECT * FROM EMP;
+
+SELECT Dept_id,
+SUM(Salary)
+FROM EMP
+GROUP BY Dept_id;
+
+SELECT Dept_id,
+MIN(Salary),
+MAX(Salary)
+FROM EMP
+GROUP BY Dept_id;
+
+SELECT Dept_id,
+SUM(Salary)
+FROM EMP
+GROUP BY Dept_id
+HAVING SUM(Salary) > 10000;
+
+SELECT Address,
+SUM(Salary)
+FROM EMP
+GROUP BY Address;
+
+
+(19)19.Write and execute a stored procedure with parameter to perform a suitable operation on a
+database table.Create a table STUDENT with the following fields:
+
+CREATE DATABASE Practical19;
+
+USE Practical19;
+
+CREATE TABLE STUDENT(
+s_id INT PRIMARY KEY,
+s_name VARCHAR(50),
+s_address VARCHAR(100),
+s_email VARCHAR(100)
+);
+
+INSERT INTO STUDENT VALUES
+(1,'Rahul','Pune','rahul@gmail.com'),
+(2,'Sneha','Mumbai','sneha@gmail.com'),
+(3,'Amit','Nashik','amit@gmail.com');
+
+SELECT * FROM STUDENT;
+
+DELIMITER //
+
+CREATE PROCEDURE GetStudent(IN stu_name VARCHAR(50))
+BEGIN
+SELECT *
+FROM STUDENT
+WHERE s_name=stu_name;
+END //
+
+DELIMITER ;
+
+CALL GetStudent('Rahul');
+
+CALL GetStudent('Sneha');
+
+
+(20)20.Create a Customers table with the following fields:
+
+CREATE DATABASE Practical20;
+
+USE Practical20;
+
+CREATE TABLE Customers(
+CustomerID INT,
+CustomerName VARCHAR(50),
+ContactName VARCHAR(50),
+Address VARCHAR(100),
+City VARCHAR(50),
+PostalCode INT,
+Country VARCHAR(50)
+);
+
+INSERT INTO Customers VALUES
+(1,'Rahul','Raj','ABC Road','Pune',411001,'India'),
+(2,'Sneha','Priya','XYZ Road','Mumbai',400001,'India'),
+(3,'Amit','Ravi','LMN Road','Pune',411002,'India');
+
+SELECT * FROM Customers;
+
+DELIMITER //
+
+CREATE PROCEDURE GetCustomerCity(IN city_name VARCHAR(50))
+BEGIN
+SELECT *
+FROM Customers
+WHERE City=city_name;
+END //
+
+DELIMITER ;
+
+CALL GetCustomerCity('Pune');
+
+CALL GetCustomerCity('Mumbai');
